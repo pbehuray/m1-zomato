@@ -376,22 +376,6 @@ def main():
         
         if recommendations:
             render_recommendation_cards(recommendations, preferences)
-            
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Restaurants Found", len(recommendations))
-            with col2:
-                st.metric("Processing Time", f"{processing_time:.0f}ms")
-            with col3:
-                st.metric("Cuisine Filter", cuisine if cuisine else "All")
-            
-            with st.expander("📊 Technical Details"):
-                st.json({
-                    "preferences": preferences,
-                    "results_count": len(recommendations),
-                    "processing_time_ms": round(processing_time, 2),
-                    "source": "streamlit_demo"
-                })
         else:
             st.info("No restaurants found matching your preferences. Try adjusting your filters.")
     else:
