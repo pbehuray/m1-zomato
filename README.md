@@ -33,7 +33,6 @@ This project follows a **phase-wise architecture** with clear separation of conc
 ✅ **Phase 6**: Backend HTTP API (Python FastAPI)  
 ✅ **Phase 7**: Frontend web UI (React + Vite)  
 ✅ **Phase 8**: Streamlit deployment (optional)  
-✅ **Phase 10**: Streamlit Cloud Deployment (Recommended Free Path)  
 
 ## 🛠 Tech Stack
 
@@ -180,26 +179,49 @@ python -m src.milestone1.cli recommend --location Bellandur --budget high --cuis
 
 ## 🌐 Deployment Options
 
-### Option 1: Production (FastAPI + React)
-- **Backend**: Deploy FastAPI to any cloud service
-- **Frontend**: Build React app and serve from CDN
-- **Database**: Local dataset caching
-- **Scaling**: Separate scaling for API and frontend
+### Production Deployment (Railway + Vercel)
 
-### Option 2: Streamlit Community Cloud
-- **Single deployment**: No separate frontend/backend
-- **Free hosting**: Streamlit Community Cloud
-- **Easy setup**: Connect GitHub repository
-- **See**: [Streamlit Deployment Guide](docs/streamlit-deploy.md)
+#### Backend on Railway
+1. **Create Railway account** at [railway.app](https://railway.app)
+2. **Deploy backend**:
+   ```bash
+   cd backend
+   railway init
+   railway up
+   ```
+3. **Set environment variables** in Railway dashboard:
+   - `GROQ_API_KEY`: Your Groq API key
+   - `FRONTEND_URL`: Your Vercel frontend URL
+   - `NODE_ENV`: `production`
+4. **Get backend URL** from Railway dashboard (e.g., `https://your-app.railway.app`)
 
-### Option 3: Docker
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY . .
-RUN pip install -e ".[streamlit]"
-EXPOSE 8501
-CMD ["streamlit", "run", "streamlit_app.py", "--server.address=0.0.0.0"]
+#### Frontend on Vercel
+1. **Create Vercel account** at [vercel.com](https://vercel.com)
+2. **Deploy frontend**:
+   ```bash
+   cd frontend
+   vercel
+   ```
+3. **Set environment variable** in Vercel dashboard:
+   - `VITE_API_URL`: Your Railway backend URL (e.g., `https://your-app.railway.app`)
+4. **Update vercel.json** with your Railway backend URL
+
+#### Configuration Files
+- `backend/railway.toml` - Railway deployment configuration
+- `backend/.railway` - Railway start command
+- `frontend/vercel.json` - Vercel deployment configuration
+
+### Option 2: Streamlit (Quick Demo)
+```bash
+cd backend
+npm install
+npm start
+# Backend runs on http://localhost:3001
+
+cd ../frontend
+npm install
+npm run dev
+# Frontend runs on http://localhost:3000
 ```
 
 ## 🧪 Testing
