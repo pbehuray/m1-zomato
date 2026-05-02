@@ -23,49 +23,109 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS matching the Vite frontend
+# Custom CSS for modern, clean UI
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
     .stApp {
-        background: linear-gradient(135deg, #E23744 0%, #CB202D 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
+    
     .main .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
+        max-width: 900px;
     }
+    
     .recommendation-card {
         background: white;
-        border-radius: 12px;
+        border-radius: 16px;
         padding: 1.5rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 10px 15px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
     }
+    
+    .recommendation-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.1), 0 20px 25px rgba(0,0,0,0.15);
+    }
+    
     .rating-badge {
-        background: #22c55e;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
         color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
+        padding: 0.375rem 0.75rem;
+        border-radius: 8px;
         font-weight: 600;
         font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
     }
+    
     .price-badge {
-        background: #f3f4f6;
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
         color: #374151;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
+        padding: 0.375rem 0.75rem;
+        border-radius: 8px;
+        font-weight: 500;
         font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
     }
+    
     .explanation {
-        background: #fef3c7;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
         border-left: 4px solid #f59e0b;
-        padding: 1rem;
+        padding: 1rem 1.25rem;
         margin-top: 1rem;
-        border-radius: 4px;
+        border-radius: 8px;
+        line-height: 1.6;
     }
+    
     .header-title {
-        color: #E23744;
-        font-weight: bold;
+        background: linear-gradient(135deg, #E23744 0%, #CB202D 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 800;
         font-style: italic;
+        letter-spacing: -0.02em;
+    }
+    
+    .form-container {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 20px 25px rgba(0,0,0,0.1);
+    }
+    
+    .restaurant-image {
+        border-radius: 12px;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .restaurant-image:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Improve form elements */
+    .stSelectbox > div > div,
+    .stTextInput > div > div {
+        background-color: #f8fafc;
+        border-radius: 8px;
+    }
+    
+    .stForm {
+        background: transparent;
+    }
+    
+    h1, h2, h3 {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -202,54 +262,57 @@ def generate_ai_explanation(restaurant, preferences):
     return " ".join(reasons) + "."
 
 def render_recommendation_cards(recommendations, preferences):
-    """Render restaurant recommendation cards"""
+    """Render restaurant recommendation cards with improved design"""
     for i, restaurant in enumerate(recommendations, 1):
         with st.container():
             st.markdown(f"""
             <div class="recommendation-card">
-                <div style="display: flex; gap: 1rem;">
+                <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
                     <img src="{restaurant['image']}" 
                          alt="{restaurant['name']}" 
-                         style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">
+                         class="restaurant-image"
+                         style="width: 140px; height: 140px; object-fit: cover; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <div style="flex: 1;">
-                        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">
+                        <h3 style="margin: 0 0 0.75rem 0; font-size: 1.25rem; font-weight: 700; color: #1f2937;">
                             {restaurant['name']}
                         </h3>
-                        <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+                        <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap;">
                             <span class="rating-badge">⭐ {restaurant['rating']}</span>
-                            <span class="price-badge">{restaurant['price_for_two']} for two</span>
+                            <span class="price-badge">💰 {restaurant['price_for_two']}</span>
                         </div>
-                        <p style="margin: 0.25rem 0; color: #4b5563; font-size: 0.9rem;">
-                            <strong>{restaurant['cuisine']}</strong>
+                        <p style="margin: 0.25rem 0; color: #4b5563; font-size: 0.95rem; font-weight: 500;">
+                            {restaurant['cuisine']}
                         </p>
-                        <p style="margin: 0.25rem 0; color: #6b7280; font-size: 0.85rem;">
+                        <p style="margin: 0.25rem 0; color: #6b7280; font-size: 0.875rem;">
                             📍 {restaurant['location']}
                         </p>
                     </div>
                 </div>
                 <div class="explanation">
-                    <strong>Why this restaurant?</strong><br>
-                    {generate_ai_explanation(restaurant, preferences)}
+                    <strong style="color: #92400e;">Why this restaurant?</strong><br>
+                    <span style="color: #78350f;">{generate_ai_explanation(restaurant, preferences)}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
-            st.divider()
 
 def main():
     """Main Streamlit application"""
+    # Header with modern design
     st.markdown("""
-    <div style="text-align: center; padding: 1rem 0;">
-        <span class="header-title" style="font-size: 2.5rem;">zomato</span>
-        <span style="font-size: 1.5rem; font-weight: 500; color: white;">AI Recommendation</span>
+    <div style="text-align: center; padding: 2rem 0 1rem 0;">
+        <span class="header-title" style="font-size: 3rem;">zomato</span>
+        <span style="font-size: 1.5rem; font-weight: 600; color: #1f2937;">AI Recommendation</span>
     </div>
+    <p style="text-align: center; color: #6b7280; font-size: 1rem; margin-bottom: 2rem;">
+        Discover your next favorite restaurant powered by AI
+    </p>
     """, unsafe_allow_html=True)
     
-    st.markdown("""
-    <div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
-    """, unsafe_allow_html=True)
+    # Form container with improved styling
+    st.markdown('<div class="form-container">', unsafe_allow_html=True)
     
     with st.form("preferences_form"):
-        st.markdown("### Find Your Perfect Meal with Zomato AI")
+        st.markdown('<h2 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937;">Find Your Perfect Meal</h2>', unsafe_allow_html=True)
         
         col1, col2 = st.columns(2)
         
@@ -277,7 +340,12 @@ def main():
         
         cravings = st.text_input("Specific Cravings (Optional)", placeholder="e.g., Spicy")
         
-        submitted = st.form_submit_button("Get Recommendations", use_container_width=True, type="primary")
+        # Improved submit button with custom styling
+        submitted = st.form_submit_button(
+            "🍽️ Get Recommendations",
+            use_container_width=True,
+            type="primary"
+        )
     
     if submitted:
         if not location:
@@ -299,10 +367,11 @@ def main():
             processing_time = (time.time() - start_time) * 1000
         
         st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown("---")
-        st.markdown("### Recommended Restaurants")
         
-        if st.button("← Back to Search"):
+        # Results header
+        st.markdown('<h2 style="text-align: center; margin: 2rem 0 1.5rem 0; color: #1f2937;">Recommended Restaurants</h2>', unsafe_allow_html=True)
+        
+        if st.button("← Back to Search", use_container_width=True):
             st.rerun()
         
         if recommendations:
@@ -331,10 +400,13 @@ def main():
     
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; padding: 1rem;">
+    <div style="text-align: center; padding: 2rem 1rem;">
         <span class="header-title" style="font-size: 1.5rem;">zomato</span>
-        <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem;">
+        <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.75rem;">
             © 2022 Zomato AI Legal • All rights reserved
+        </p>
+        <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.25rem;">
+            Powered by AI • Built with Streamlit
         </p>
     </div>
     """, unsafe_allow_html=True)
