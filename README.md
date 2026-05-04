@@ -177,48 +177,25 @@ python -m src.milestone1.cli recommend --location Bellandur --budget high --cuis
 3. **Milestone1** → **Groq LLM** (server-side only)
 4. **Results** → **FastAPI** → **Browser** (HTTP, JSON)
 
-## 🌐 Deployment Options
+## 🌐 Deployment
 
-### Production Deployment (Railway + Vercel)
+For detailed deployment instructions, see [docs/deployment.md](docs/deployment.md)
 
-#### Backend on Railway
-1. **Create Railway account** at [railway.app](https://railway.app)
-2. **Deploy backend**:
-   ```bash
-   cd backend
-   railway init
-   railway up
-   ```
-3. **Set environment variables** in Railway dashboard:
-   - `GROQ_API_KEY`: Your Groq API key
-   - `FRONTEND_URL`: Your Vercel frontend URL
-   - `NODE_ENV`: `production`
-4. **Get backend URL** from Railway dashboard (e.g., `https://your-app.railway.app`)
+### Quick Summary
+- **Backend**: Deploy to Render (Node.js/Express)
+- **Frontend**: Deploy to Vercel (React + Vite)
+- See [deployment guide](docs/deployment.md) for step-by-step instructions
 
-#### Frontend on Vercel
-1. **Create Vercel account** at [vercel.com](https://vercel.com)
-2. **Deploy frontend**:
-   ```bash
-   cd frontend
-   vercel
-   ```
-3. **Set environment variable** in Vercel dashboard:
-   - `VITE_API_URL`: Your Railway backend URL (e.g., `https://your-app.railway.app`)
-4. **Update vercel.json** with your Railway backend URL
-
-#### Configuration Files
-- `backend/railway.toml` - Railway deployment configuration
-- `backend/.railway` - Railway start command
-- `frontend/vercel.json` - Vercel deployment configuration
-
-### Option 2: Streamlit (Quick Demo)
+### Local Development
 ```bash
+# Backend
 cd backend
 npm install
 npm start
 # Backend runs on http://localhost:3001
 
-cd ../frontend
+# Frontend
+cd frontend
 npm install
 npm run dev
 # Frontend runs on http://localhost:3000
