@@ -1,7 +1,7 @@
-# Deployment Guide: Render + Vercel
+# Deployment Guide: Railway + Vercel
 
 This guide explains how to deploy the Zomato AI Recommendation system using:
-- **Render** for the backend (Node.js/Express API)
+- **Railway** for the backend (Node.js/Express API)
 - **Vercel** for the frontend (React + Vite)
 
 ---
@@ -11,23 +11,23 @@ This guide explains how to deploy the Zomato AI Recommendation system using:
 1. **GitHub Repository**: Ensure your code is pushed to GitHub
 2. **Groq API Key**: Get your API key from [console.groq.com](https://console.groq.com)
 3. **Accounts**:
-   - Render account at [render.com](https://render.com)
+   - Railway account at [railway.app](https://railway.app)
    - Vercel account at [vercel.com](https://vercel.com)
 
 ---
 
-## Part 1: Backend Deployment on Render
+## Part 1: Backend Deployment on Railway
 
-### Step 1: Create Render Web Service
+### Step 1: Create Railway Project
 
-1. Go to [dashboard.render.com](https://dashboard.render.com)
-2. Click **"New +"** → **"Web Service"**
+1. Go to [railway.app](https://railway.app)
+2. Click **"New Project"** → **"Deploy from GitHub"**
 3. Connect your GitHub repository
 4. Select the repository: `pbehuray/m1-zomato`
 
-### Step 2: Configure Build & Deploy
+### Step 2: Configure Service
 
-**Name**: `zomato-backend` (or any name you prefer)
+**Service Name**: `zomato-backend` (or any name you prefer)
 
 **Root Directory**: `backend`
 
@@ -41,7 +41,7 @@ npm install
 node src/server.js
 ```
 
-**Environment Variables** (click "Advanced" → "Add Environment Variable"):
+**Environment Variables** (click "Variables" → "New Variable"):
 ```
 GROQ_API_KEY = your_actual_groq_api_key_here
 FRONTEND_URL = https://your-frontend.vercel.app
@@ -51,23 +51,24 @@ PORT = 3001
 
 **Region**: Choose the region closest to your users (e.g., Oregon, Singapore)
 
-**Instance Type**: 
-- Free: 512MB RAM, 0.1 CPU (spins down after 15min inactivity)
-- Starter ($7/mo): 512MB RAM, 0.5 CPU (always on)
+**Plan**:
+- Free: 512MB RAM, 0.5 CPU (spins down after inactivity)
+- Hobby ($5/mo): 512MB RAM, always on
+- Pro ($20/mo): 1GB RAM, better performance
 
 ### Step 3: Deploy
 
-Click **"Create Web Service"**. Render will:
+Click **"Deploy"**. Railway will:
 1. Clone your repository
 2. Run `npm install` in the `backend/` directory
 3. Start the server with `node src/server.js`
-4. Assign a URL like `https://zomato-backend.onrender.com`
+4. Assign a URL like `https://zomato-backend-production.up.railway.app`
 
 ### Step 4: Verify Deployment
 
 Once deployed, test the health endpoint:
 ```bash
-curl https://your-backend.onrender.com/api/health
+curl https://your-backend.up.railway.app/api/health
 ```
 
 Expected response:
@@ -117,11 +118,11 @@ Click **"Deploy"**. Vercel will:
 
 ### Step 4: Update Backend CORS
 
-After getting your Vercel URL, go back to Render:
-1. Open your Render web service
-2. Go to **"Environment"** section
+After getting your Vercel URL, go back to Railway:
+1. Open your Railway project
+2. Go to **"Variables"** section
 3. Update `FRONTEND_URL` to your actual Vercel URL
-4. Click **"Save Changes"** (this will trigger a redeploy)
+4. Click **"Save"** (this will trigger a redeploy)
 
 ---
 
@@ -175,8 +176,9 @@ const api = axios.create({
 ### Backend Issues
 
 **Issue: "npm command not found"**
-- Ensure "Root Directory" is set to `backend` in Render settings
+- Ensure "Root Directory" is set to `backend` in Railway settings
 - Check that `package.json` exists in the `backend/` directory
+- Verify Nixpacks is using Node.js (check `nixpacks.toml` if present)
 
 **Issue: "Module not found"**
 - Verify all dependencies are in `backend/package.json`
@@ -187,7 +189,7 @@ const api = axios.create({
 - Check that the backend CORS configuration is correct
 
 **Issue: Service spins down (Free tier)**
-- Upgrade to Starter tier ($7/mo) for always-on service
+- Upgrade to Hobby tier ($5/mo) for always-on service
 - Or accept 30-50 second cold start on free tier
 
 ### Frontend Issues
@@ -209,23 +211,23 @@ const api = axios.create({
 
 ## Part 5: Cost Summary
 
-### Render (Backend)
-- **Free**: $0 (spins down after 15min inactivity)
-- **Starter**: $7/mo (512MB RAM, always on)
-- **Standard**: $25/mo (1GB RAM, better performance)
+### Railway (Backend)
+- **Free**: $0 (spins down after inactivity)
+- **Hobby**: $5/mo (512MB RAM, always on)
+- **Pro**: $20/mo (1GB RAM, better performance)
 
 ### Vercel (Frontend)
 - **Hobby**: $0 (100GB bandwidth, 6 builds/day)
 - **Pro**: $20/mo (1TB bandwidth, unlimited builds)
 
-**Total Minimum Cost**: $7/mo (Starter backend + Free frontend)
+**Total Minimum Cost**: $5/mo (Hobby backend + Free frontend)
 
 ---
 
 ## Part 6: Monitoring & Logs
 
-### Render Logs
-1. Go to your web service in Render dashboard
+### Railway Logs
+1. Go to your project in Railway dashboard
 2. Click **"Logs"** tab
 3. View real-time logs, build logs, and deployment history
 
@@ -235,16 +237,16 @@ const api = axios.create({
 3. View build logs and deployment history
 
 ### Health Monitoring
-- Backend health endpoint: `https://your-backend.onrender.com/api/health`
+- Backend health endpoint: `https://your-backend.up.railway.app/api/health`
 - Set up uptime monitoring with services like UptimeRobot or Pingdom
 
 ---
 
 ## Part 7: CI/CD
 
-Both Render and Vercel provide automatic deployments on git push:
+Both Railway and Vercel provide automatic deployments on git push:
 
-**Render**: Automatically deploys when you push to the connected branch
+**Railway**: Automatically deploys when you push to the connected branch
 
 **Vercel**: Automatically deploys when you push to the connected branch
 
@@ -262,10 +264,10 @@ To enable automatic deployments:
 2. Add your domain (e.g., `app.yourdomain.com`)
 3. Update DNS records as instructed by Vercel
 
-### Add Custom Domain to Render
-1. Go to Render web service → **"Settings"** → **"Custom Domains"**
+### Add Custom Domain to Railway
+1. Go to Railway project → **"Settings"** → **"Domains"**
 2. Add your domain (e.g., `api.yourdomain.com`)
-3. Update DNS records as instructed by Render
+3. Update DNS records as instructed by Railway
 
 ---
 
@@ -283,9 +285,9 @@ To enable automatic deployments:
 
 ## Part 10: Scaling Considerations
 
-### Backend Scaling (Render)
-- **Vertical**: Upgrade instance type for more RAM/CPU
-- **Horizontal**: Use Render's load balancer with multiple instances
+### Backend Scaling (Railway)
+- **Vertical**: Upgrade plan for more RAM/CPU
+- **Horizontal**: Use Railway's load balancer with multiple instances
 - **Database**: Add PostgreSQL if you need persistent storage
 
 ### Frontend Scaling (Vercel)
@@ -297,15 +299,15 @@ To enable automatic deployments:
 ## Quick Reference URLs
 
 After deployment, you'll have:
-- **Backend**: `https://your-backend.onrender.com`
+- **Backend**: `https://your-backend.up.railway.app`
 - **Frontend**: `https://your-frontend.vercel.app`
-- **Health Check**: `https://your-backend.onrender.com/api/health`
-- **Recommendations API**: `https://your-backend.onrender.com/api/recommendations`
+- **Health Check**: `https://your-backend.up.railway.app/api/health`
+- **Recommendations API**: `https://your-backend.up.railway.app/api/recommendations`
 
 ---
 
 ## Support
 
-- Render Documentation: [docs.render.com](https://docs.render.com)
+- Railway Documentation: [docs.railway.app](https://docs.railway.app)
 - Vercel Documentation: [vercel.com/docs](https://vercel.com/docs)
 - GitHub Repository: `pbehuray/m1-zomato`

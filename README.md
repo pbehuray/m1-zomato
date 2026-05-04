@@ -182,7 +182,7 @@ python -m src.milestone1.cli recommend --location Bellandur --budget high --cuis
 For detailed deployment instructions, see [docs/deployment.md](docs/deployment.md)
 
 ### Quick Summary
-- **Backend**: Deploy to Render (Node.js/Express)
+- **Backend**: Deploy to Railway (Node.js/Express)
 - **Frontend**: Deploy to Vercel (React + Vite)
 - See [deployment guide](docs/deployment.md) for step-by-step instructions
 
