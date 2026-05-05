@@ -6,11 +6,8 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://<your-railway-backend-url>/api/:path*"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "env": {
-    "VITE_API_URL": "https://<your-railway-backend-url>"
-  }
+  ]
 }

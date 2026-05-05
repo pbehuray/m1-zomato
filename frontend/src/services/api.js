@@ -41,17 +41,22 @@ api.interceptors.response.use(
 
 // API functions
 export const getHealth = async () => {
-  const response = await api.get('/health')
+  const response = await api.get('/api/health')
   return response.data
 }
 
-export const getMetaInfo = async () => {
-  const response = await api.get('/api/v1/meta')
+export const getLocations = async () => {
+  const response = await api.get('/api/locations')
+  return response.data
+}
+
+export const validatePreferences = async (preferences) => {
+  const response = await api.post('/api/preferences/validate', preferences)
   return response.data
 }
 
 export const getRecommendations = async (preferences) => {
-  const response = await api.post('/api/v1/recommendations', preferences)
+  const response = await api.post('/api/recommendations', preferences)
   return response.data
 }
 
