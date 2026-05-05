@@ -3,5 +3,5 @@ builder = "NIXPACKS"
 
 [deploy]
 startCommand = "cd backend && node src/server.js"
-healthcheckPath = "/health"
+healthcheckPath = "/api/health"
 healthcheckTimeout = 100
